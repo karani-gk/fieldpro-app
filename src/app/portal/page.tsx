@@ -40,7 +40,7 @@ export default function MyJobs() {
 
   return (
     <div>
-      <h1 className="mb-4 text-xl font-bold">Your jobs</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight">Your jobs</h1>
       <ErrorNote error={error} />
       {jobs === null ? (
         <div className="h-40 animate-pulse rounded-xl bg-slate-100" />
@@ -51,7 +51,7 @@ export default function MyJobs() {
       ) : (
         <div className="card overflow-x-auto p-0">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
+            <thead className="border-b border-slate-200 bg-slate-50/80 text-xs uppercase tracking-wider text-slate-500">
               <tr>
                 <th className="px-4 py-3">Job</th>
                 <th className="px-4 py-3">Issue</th>
@@ -64,7 +64,7 @@ export default function MyJobs() {
               {jobs.map((job) => (
                 <tr key={job.id} className={`border-b border-slate-100 last:border-0 ${lastEvent?.id === job.id ? "bg-emerald-50" : ""}`} data-testid={`row-${job.id}`}>
                   <td className="px-4 py-3">
-                    <Link href={`/portal/jobs/${job.id}`} className="font-medium text-brand underline">
+                    <Link href={`/portal/jobs/${job.id}`} className="font-semibold text-brand underline-offset-2 hover:underline">
                       {job.id}
                     </Link>
                   </td>

@@ -21,9 +21,10 @@ export default function ActivationGate({ children }: { children: React.ReactNode
   if (activated === null) return null;
   if (activated) return <>{children}</>;
   return (
-    <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-      <p>This fieldpro installation is not activated yet. Enter the access code from your course email first. You only do this once.</p>
-      <Link href="/activate" className="btn-primary mt-3 inline-block">
+    <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900">
+      <p className="font-semibold">One step first</p>
+      <p className="mt-1">This fieldpro installation is not activated yet. Enter the access code from your course email. You only do this once.</p>
+      <Link href="/activate" className="btn-primary mt-4 w-full">
         Activate fieldpro
       </Link>
     </div>

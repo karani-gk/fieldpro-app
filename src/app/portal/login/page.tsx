@@ -36,8 +36,9 @@ export default function PortalLogin() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Customer portal</h1>
-      <p className="mt-1 text-sm text-slate-600">Book jobs and follow them live.</p>
+      <p className="eyebrow">Customer portal</p>
+      <h1 className="mt-2 text-3xl font-bold tracking-tight">Welcome back</h1>
+      <p className="mt-2 text-sm text-slate-600">Book jobs, follow them live and approve finished work.</p>
       <ActivationGate>
         <form onSubmit={submit} className="mt-6 space-y-4">
           <div>
@@ -53,7 +54,7 @@ export default function PortalLogin() {
             <input id="password" type="password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
           </div>
           <ErrorNote error={error} />
-          <button className="btn-primary w-full" disabled={busy}>
+          <button className="btn-primary w-full py-3" disabled={busy}>
             {busy ? "Signing in…" : "Sign in"}
           </button>
         </form>

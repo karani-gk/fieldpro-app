@@ -130,6 +130,9 @@ export function techApi(token: string) {
 export type TechApi = ReturnType<typeof techApi>;
 
 export const auth = {
+  /** Email or mobile number and password: the same token as the code. */
+  signInWithPassword: (login: string, password: string) =>
+    post<{ token: string; user: string; technician: { id: string; name: string } }>("auth.sign_in_with_password", null, { login, password }),
   requestOtp: (mobileNo: string) => post<{ sent: boolean; message: string }>("auth.request_otp", null, { mobile_no: mobileNo }),
   verifyOtp: (mobileNo: string, code: string) =>
     post<{ token: string; user: string; technician: { id: string; name: string } }>("auth.verify_otp", null, {

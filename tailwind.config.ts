@@ -5,7 +5,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: { DEFAULT: "#0e7490", dark: "#155e75", light: "#cffafe" },
+        // One palette with the GitHub social cards: deep ink green, a teal brand, mint accents.
+        brand: { DEFAULT: "#0f766e", dark: "#115e59", light: "#ccfbf1" },
+        ink: { DEFAULT: "#0f2a24", soft: "#163d34" },
+        mint: { DEFAULT: "#7fd3b0", soft: "#d9f5ea" },
+      },
+      fontFamily: {
+        // Inter when the machine has it; the system UI font otherwise. No web-font download, so
+        // the app still looks right offline.
+        sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
+      },
+      boxShadow: {
+        soft: "0 1px 2px rgb(15 42 36 / 0.04), 0 4px 16px -4px rgb(15 42 36 / 0.08)",
+        lift: "0 2px 4px rgb(15 42 36 / 0.06), 0 12px 32px -8px rgb(15 42 36 / 0.18)",
       },
     },
   },

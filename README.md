@@ -12,8 +12,8 @@
 built on [Frappe](https://frappe.io/framework) and [ERPNext](https://erpnext.com). One Next.js app
 holds two products:
 
-- **Technician app (`/tech`):** sign in with a one-time code, see today's jobs, start and end
-  visits, add parts and photos, capture the customer's signature, and keep working offline.
+- **Technician app (`/tech`):** sign in with a password or a one-time code, see today's jobs,
+  start and end visits, add parts and photos, capture the customer's signature, and keep working offline.
 - **Customer portal (`/portal`):** book a job, follow it live, accept or reject finished work and
   download the job card.
 
@@ -59,9 +59,10 @@ The first time, the sign-in pages point to http://localhost:3030/activate: paste
 from your [ERPNext as a Platform](https://www.upeo.academy/courses/erpnext-as-platform-course)
 course email. An installation is activated once, for everyone.
 
-Open http://localhost:3030/tech and sign in as a demo technician (`+254700100001`), or
+Open http://localhost:3030/tech and sign in as a demo technician (`0700 100001` or
+`achieng@fieldpro.test`, password `fieldpro-demo`, or a one-time code), or
 http://localhost:3030/portal as a demo customer (`clinic@fieldpro.test`, password
-`fieldpro-demo`). Locally the technician's one-time code is in the backend's Desk under
+`fieldpro-demo`). Locally a one-time code is not sent: read it in the backend's Desk under
 **SMS Log**.
 
 Checks:

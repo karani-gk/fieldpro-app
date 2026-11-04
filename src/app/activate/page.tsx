@@ -5,6 +5,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import AuthLayout from "@/components/AuthLayout";
 import ErrorNote from "@/components/ErrorNote";
 import { activation } from "@/lib/api";
 import type { ActivationStatus } from "@/lib/types";
@@ -33,16 +34,17 @@ export default function ActivatePage() {
   }
 
   return (
-    <main className="mx-auto max-w-md px-4 py-12">
-      <h1 className="text-2xl font-bold">Activate fieldpro</h1>
+    <AuthLayout>
+      <p className="eyebrow">One time only</p>
+      <h1 className="mt-2 text-3xl font-bold tracking-tight">Activate fieldpro</h1>
       {status?.activated ? (
         <div className="mt-6 space-y-3 text-sm">
           <p>This installation is activated. Everyone can sign in now.</p>
-          <p className="flex gap-4">
-            <Link href="/tech/login" className="underline">
+          <p className="grid gap-2 sm:grid-cols-2">
+            <Link href="/tech/login" className="btn-primary">
               Technician sign-in
             </Link>
-            <Link href="/portal/login" className="underline">
+            <Link href="/portal/login" className="btn-secondary">
               Customer portal
             </Link>
           </p>
@@ -57,7 +59,7 @@ export default function ActivatePage() {
             <textarea id="code" className="input font-mono text-xs" rows={4} placeholder="UA1...." value={code} onChange={(e) => setCode(e.target.value)} required />
           </div>
           <ErrorNote error={error} />
-          <button className="btn-primary w-full" disabled={busy}>
+          <button className="btn-primary w-full py-3" disabled={busy}>
             {busy ? "Checking…" : "Activate"}
           </button>
           {status && (
@@ -71,6 +73,6 @@ export default function ActivatePage() {
           )}
         </form>
       )}
-    </main>
+    </AuthLayout>
   );
 }
