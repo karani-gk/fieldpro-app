@@ -55,6 +55,10 @@ npm ci
 npm run dev                  # http://localhost:3030
 ```
 
+The first time, the sign-in pages point to http://localhost:3030/activate: paste the access code
+from your [ERPNext as a Platform](https://www.upeo.academy/courses/erpnext-as-platform-course)
+course email. An installation is activated once, for everyone.
+
 Open http://localhost:3030/tech and sign in as a demo technician (`+254700100001`), or
 http://localhost:3030/portal as a demo customer (`clinic@fieldpro.test`, password
 `fieldpro-demo`). Locally the technician's one-time code is in the backend's Desk under
@@ -102,7 +106,8 @@ filled in; without them the app runs without push.
 | `src/app/tech/` | Technician app: sign-in, today's jobs, a job, my week; `TechProvider.tsx` holds auth, sync and live state |
 | `src/app/portal/` | Customer portal: sign-in, my jobs (live), book a job, a job (accept or reject, job card) |
 | `src/lib/` | `api.ts`, `errors.ts`, `types.ts` (the API contract), `offline/`, `realtime.ts`, `push.ts`, `format.ts` |
-| `src/components/` | Status badge, error note, signature pad, private image |
+| `src/app/activate/` | Activating the installation with the course access code (once) |
+| `src/components/` | Status badge, error note, signature pad, private image, activation gate |
 | `tests/` | Unit tests for the error format and the outbox |
 
 Every pattern here (token storage, outbox and client ids, cursor sync, server-owned workflow

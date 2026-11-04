@@ -11,6 +11,7 @@
 
 import { ApiError, offlineError, toApiError } from "./errors.ts";
 import type {
+  ActivationStatus,
   Action,
   JobDetail,
   JobSummary,
@@ -135,6 +136,14 @@ export const auth = {
       mobile_no: mobileNo,
       code,
     }),
+};
+
+// ---------------------------------------------------------------- activation (once per installation)
+
+// Open to guests: until the installation is activated with the course access code, nobody can sign in.
+export const activation = {
+  status: () => get<ActivationStatus>("activation.status", null),
+  activate: (code: string) => post<ActivationStatus>("activation.activate", null, { code }),
 };
 
 // ---------------------------------------------------------------- the customer portal (cookie)

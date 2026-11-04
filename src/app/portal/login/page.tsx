@@ -5,6 +5,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import ActivationGate from "@/components/ActivationGate";
 import ErrorNote from "@/components/ErrorNote";
 import { portal } from "@/lib/api";
 import { ApiError } from "@/lib/errors";
@@ -37,24 +38,26 @@ export default function PortalLogin() {
     <div>
       <h1 className="text-2xl font-bold">Customer portal</h1>
       <p className="mt-1 text-sm text-slate-600">Book jobs and follow them live.</p>
-      <form onSubmit={submit} className="mt-6 space-y-4">
-        <div>
-          <label className="label" htmlFor="email">
-            Email
-          </label>
-          <input id="email" type="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username" />
-        </div>
-        <div>
-          <label className="label" htmlFor="password">
-            Password
-          </label>
-          <input id="password" type="password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
-        </div>
-        <ErrorNote error={error} />
-        <button className="btn-primary w-full" disabled={busy}>
-          {busy ? "Signing in…" : "Sign in"}
-        </button>
-      </form>
+      <ActivationGate>
+        <form onSubmit={submit} className="mt-6 space-y-4">
+          <div>
+            <label className="label" htmlFor="email">
+              Email
+            </label>
+            <input id="email" type="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username" />
+          </div>
+          <div>
+            <label className="label" htmlFor="password">
+              Password
+            </label>
+            <input id="password" type="password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
+          </div>
+          <ErrorNote error={error} />
+          <button className="btn-primary w-full" disabled={busy}>
+            {busy ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+      </ActivationGate>
     </div>
   );
 }

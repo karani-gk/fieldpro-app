@@ -6,8 +6,10 @@
 > offline through an outbox with cursor sync; the portal uses a Frappe session cookie with CSRF.
 > It is the code built in UPEO Academy's course "ERPNext as a Platform".
 
-It needs the fieldpro-frappe backend. All backend calls go through `src/lib/api.ts`; response
-types in `src/lib/types.ts` mirror the backend's API shapes. Next.js proxies `/api` and
+It needs the fieldpro-frappe backend, activated once with the access code emailed to course
+learners (the /activate page here); until then the sign-in pages point to /activate. All backend
+calls go through `src/lib/api.ts`; response types in `src/lib/types.ts` mirror the backend's API
+shapes. Next.js proxies `/api` and
 `/socket.io` to Frappe so the browser stays on one origin.
 
 ## Docs

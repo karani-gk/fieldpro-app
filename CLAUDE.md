@@ -19,3 +19,7 @@ plain, commented where the why is not obvious, and consistent with `../fieldpro-
 - Browsers cannot put headers on a WebSocket, so the token-authenticated technician app uses
   long-polling.
 - Wait for elements, not `networkidle`, in browser tests: long-polling keeps the network busy.
+- Sign-in pages are wrapped in `ActivationGate`: until the backend is activated with the course
+  access code (once per installation) they point to `/activate`. The backend enforces it anyway.
+- If the owner's dev server is running, do not `npm run build` here (it corrupts their `.next`):
+  build a copy elsewhere with `node_modules` symlinked.

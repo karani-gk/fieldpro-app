@@ -103,6 +103,12 @@ export interface WeekStats {
   days: { date: string; hours: number }[];
 }
 
+/** fieldpro.services.activation.Activation.status(): is this installation activated? */
+export interface ActivationStatus {
+  activated: boolean;
+  course_url: string;
+}
+
 export interface ServerInfo {
   api_version: string;
   min_client_version: string;
