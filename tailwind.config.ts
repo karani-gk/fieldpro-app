@@ -15,6 +15,15 @@ const config: Config = {
         // the app still looks right offline.
         sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
       },
+      keyframes: {
+        float: { "0%, 100%": { transform: "translateY(0)" }, "50%": { transform: "translateY(-8px)" } },
+        rise: { from: { opacity: "0", transform: "translateY(12px)" }, to: { opacity: "1", transform: "translateY(0)" } },
+      },
+      animation: {
+        float: "float 6s ease-in-out infinite",
+        "float-slow": "float 8s ease-in-out infinite",
+        rise: "rise 0.6s ease-out both",
+      },
       boxShadow: {
         soft: "0 1px 2px rgb(15 42 36 / 0.04), 0 4px 16px -4px rgb(15 42 36 / 0.08)",
         lift: "0 2px 4px rgb(15 42 36 / 0.06), 0 12px 32px -8px rgb(15 42 36 / 0.18)",

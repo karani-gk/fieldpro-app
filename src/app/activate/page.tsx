@@ -34,7 +34,7 @@ export default function ActivatePage() {
   }
 
   return (
-    <AuthLayout>
+    <AuthLayout showcase="activate">
       <h1 className="text-2xl font-bold tracking-tight">Activate fieldpro</h1>
       {status?.activated ? (
         <div className="mt-6 space-y-3 text-sm">

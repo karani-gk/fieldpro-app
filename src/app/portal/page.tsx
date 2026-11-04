@@ -4,8 +4,10 @@
 // is pushed here over socket.io and its row updates without a refresh.
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ErrorNote from "@/components/ErrorNote";
+import { Arrow } from "@/components/icons";
 import StatusBadge from "@/components/StatusBadge";
 import { portal } from "@/lib/api";
 import { dateTime, day } from "@/lib/format";
@@ -14,6 +16,7 @@ import { usePortal } from "./PortalProvider";
 
 export default function MyJobs() {
   const { version, lastEvent } = usePortal();
+  const router = useRouter();
   const [jobs, setJobs] = useState<JobSummary[] | null>(null);
   const [cursor, setCursor] = useState<string | null>(null);
   const [error, setError] = useState<unknown>(null);
@@ -58,11 +61,18 @@ export default function MyJobs() {
                 <th className="px-4 py-3">Date</th>
                 <th className="px-4 py-3">Technician</th>
                 <th className="px-4 py-3">Status</th>
+                <th className="w-8" aria-hidden />
               </tr>
             </thead>
             <tbody>
               {jobs.map((job) => (
-                <tr key={job.id} className={`border-b border-slate-100 last:border-0 ${lastEvent?.id === job.id ? "bg-emerald-50" : ""}`} data-testid={`row-${job.id}`}>
+                // The whole row opens the job; the link in the first cell keeps it reachable by keyboard.
+                <tr
+                  key={job.id}
+                  onClick={() => router.push(`/portal/jobs/${job.id}`)}
+                  className={`group cursor-pointer border-b border-slate-100 transition last:border-0 hover:bg-slate-50 ${lastEvent?.id === job.id ? "bg-emerald-50" : ""}`}
+                  data-testid={`row-${job.id}`}
+                >
                   <td className="px-4 py-3">
                     <Link href={`/portal/jobs/${job.id}`} className="font-semibold text-brand underline-offset-2 hover:underline">
                       {job.id}
@@ -74,6 +84,9 @@ export default function MyJobs() {
                   <td className="px-4 py-3">
                     <StatusBadge status={job.status} />
                     <p className="mt-0.5 text-[11px] text-slate-400">{dateTime(job.updated_at)}</p>
+                  </td>
+                  <td className="w-8 pr-4 text-slate-300 transition group-hover:text-brand">
+                    <Arrow className="h-4 w-4 transition group-hover:translate-x-0.5" />
                   </td>
                 </tr>
               ))}

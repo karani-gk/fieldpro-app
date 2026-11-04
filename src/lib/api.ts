@@ -177,6 +177,17 @@ export const portal = {
   apply: (job: string, action: string, reason?: string) => post<JobDetail>("workflow.apply", "session", { job, action, reason }),
   /** A link the browser downloads with the session cookie; the server checks the job is yours. */
   jobCardUrl: (job: string) => `${V1}.files.job_card?job=${encodeURIComponent(job)}`,
+  /** The job card PDF as a file, or the server's error as an ApiError (not a page of JSON). */
+  jobCard: async (job: string): Promise<Blob> => {
+    let res: Response;
+    try {
+      res = await fetch(portal.jobCardUrl(job), { credentials: "same-origin" });
+    } catch {
+      throw offlineError();
+    }
+    if (!res.ok) throw toApiError(res.status, await res.json().catch(() => ({})));
+    return res.blob();
+  },
 };
 
 // ---------------------------------------------------------------- server components

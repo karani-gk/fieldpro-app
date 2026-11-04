@@ -7,7 +7,7 @@ import { CourseNote, Logo } from "@/components/Brand";
 import { usePortal } from "./PortalProvider";
 
 export default function PortalShell({ children }: { children: React.ReactNode }) {
-  if (usePathname() === "/portal/login") return <AuthLayout>{children}</AuthLayout>;
+  if (usePathname() === "/portal/login") return <AuthLayout showcase="portal">{children}</AuthLayout>;
   return <SignedInShell>{children}</SignedInShell>;
 }
 
@@ -33,9 +33,15 @@ function SignedInShell({ children }: { children: React.ReactNode }) {
             <Link href="/portal/book" className="btn-primary py-2">
               Book a job
             </Link>
-            <button className="text-slate-500 hover:text-slate-800" onClick={() => void signOut()}>
-              Sign out
-            </button>
+            <div className="flex items-center gap-2 border-l border-slate-200 pl-3">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-mint to-brand text-xs font-bold text-ink" title={session.full_name}>
+                {initials(session.full_name)}
+              </span>
+              <span className="hidden text-sm font-medium text-slate-700 md:block">{session.full_name}</span>
+              <button className="ml-1 text-slate-500 hover:text-slate-800" onClick={() => void signOut()}>
+                Sign out
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -45,4 +51,13 @@ function SignedInShell({ children }: { children: React.ReactNode }) {
       </footer>
     </div>
   );
+}
+
+function initials(name: string): string {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 }

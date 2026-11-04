@@ -6,6 +6,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ErrorNote from "@/components/ErrorNote";
+import JobCardButton from "@/components/JobCardButton";
 import StatusBadge from "@/components/StatusBadge";
 import { portal } from "@/lib/api";
 import { dateTime, day, money } from "@/lib/format";
@@ -116,9 +117,7 @@ export default function PortalJob({ params }: { params: { id: string } }) {
       <section className="card">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="font-semibold">Work done</h2>
-          <a className="text-sm text-brand underline" href={portal.jobCardUrl(job.id)} data-testid="job-card">
-            Download job card (PDF)
-          </a>
+          <JobCardButton job={job.id} />
         </div>
         {job.visits.length === 0 ? (
           <p className="text-sm text-slate-500">No visits yet.</p>

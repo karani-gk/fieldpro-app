@@ -7,7 +7,7 @@ import { Calendar, List } from "@/components/icons";
 import { useTech } from "./TechProvider";
 
 export default function TechShell({ children }: { children: React.ReactNode }) {
-  if (usePathname() === "/tech/login") return <AuthLayout>{children}</AuthLayout>;
+  if (usePathname() === "/tech/login") return <AuthLayout showcase="tech">{children}</AuthLayout>;
   return <SignedInShell>{children}</SignedInShell>;
 }
 
