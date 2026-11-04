@@ -77,11 +77,7 @@ function Hero({ company }: { company: string | null }) {
         </nav>
         <div className="grid items-center gap-12 pb-20 pt-10 lg:grid-cols-[1.15fr_1fr] lg:pb-28 lg:pt-16">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-mint ring-1 ring-white/10">
-              <span className="h-1.5 w-1.5 rounded-full bg-mint" />
-              Open source · Frappe + ERPNext v16 + Next.js
-            </p>
-            <h1 className="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+            <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
               Field service, from <span className="bg-gradient-to-r from-mint to-white bg-clip-text text-transparent">booking to invoice.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-300">

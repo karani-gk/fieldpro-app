@@ -36,9 +36,8 @@ export default function PortalLogin() {
 
   return (
     <div>
-      <p className="eyebrow">Customer portal</p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight">Welcome back</h1>
-      <p className="mt-2 text-sm text-slate-600">Book jobs, follow them live and approve finished work.</p>
+      <h1 className="text-2xl font-bold tracking-tight">Sign in</h1>
+      <p className="mt-1 text-sm text-slate-500">Customer portal</p>
       <ActivationGate>
         <form onSubmit={submit} className="mt-6 space-y-4">
           <div>

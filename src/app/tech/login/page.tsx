@@ -17,24 +17,17 @@ export default function TechLogin() {
   const [method, setMethod] = useState<Method>("password");
   return (
     <div>
-      <p className="eyebrow">Technician app</p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight">Welcome back</h1>
-      <p className="mt-2 text-sm text-slate-600">Sign in to see today&apos;s jobs.</p>
+      <h1 className="text-2xl font-bold tracking-tight">Sign in</h1>
+      <p className="mt-1 text-sm text-slate-500">Technician app</p>
       <ActivationGate>
-        <div className="mt-6 grid grid-cols-2 rounded-xl bg-slate-100 p-1 text-sm" role="tablist">
-          {(["password", "code"] as const).map((m) => (
-            <button
-              key={m}
-              role="tab"
-              aria-selected={method === m}
-              onClick={() => setMethod(m)}
-              className={`rounded-lg py-2 font-medium transition ${method === m ? "bg-white text-ink shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-            >
-              {m === "password" ? "Password" : "Sign-in code"}
-            </button>
-          ))}
-        </div>
         {method === "password" ? <PasswordForm /> : <CodeForm />}
+        <button
+          type="button"
+          onClick={() => setMethod(method === "password" ? "code" : "password")}
+          className="mt-5 w-full text-center text-sm font-medium text-brand underline-offset-2 hover:underline"
+        >
+          {method === "password" ? "Use a sign-in code instead" : "Use my password instead"}
+        </button>
       </ActivationGate>
     </div>
   );
@@ -66,7 +59,7 @@ function PasswordForm() {
         <label className="label" htmlFor="login">
           Email or mobile number
         </label>
-        <input id="login" className="input" autoComplete="username" placeholder="achieng@fieldpro.test" value={login} onChange={(e) => setLogin(e.target.value)} required />
+        <input id="login" className="input" autoComplete="username" value={login} onChange={(e) => setLogin(e.target.value)} required />
       </div>
       <div>
         <label className="label" htmlFor="password">
@@ -156,7 +149,7 @@ function CodeForm() {
       <button type="button" className="w-full text-sm text-slate-500 underline-offset-2 hover:underline" onClick={() => setStep("phone")}>
         Use another number
       </button>
-      <p className="text-center text-xs text-slate-400">Development: nothing is sent. Read the code in Desk under SMS Log.</p>
+      <p className="text-center text-xs text-slate-400">On a local machine nothing is sent: the code is in Desk under SMS Log.</p>
     </form>
   );
 }

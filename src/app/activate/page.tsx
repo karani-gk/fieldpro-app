@@ -35,8 +35,7 @@ export default function ActivatePage() {
 
   return (
     <AuthLayout>
-      <p className="eyebrow">One time only</p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight">Activate fieldpro</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Activate fieldpro</h1>
       {status?.activated ? (
         <div className="mt-6 space-y-3 text-sm">
           <p>This installation is activated. Everyone can sign in now.</p>

@@ -13,7 +13,7 @@ export function Logo({ tone = "dark", href = "/" }: { tone?: "dark" | "light"; h
         </svg>
       </span>
       <span className={tone === "light" ? "text-white" : "text-ink"}>
-        field<span className="text-brand">pro</span>
+        field<span className={tone === "light" ? "text-mint" : "text-brand"}>pro</span>
       </span>
     </Link>
   );
