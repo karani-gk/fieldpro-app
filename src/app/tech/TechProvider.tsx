@@ -95,7 +95,8 @@ function SignedIn({ auth, children }: { auth: TechAuth; children: React.ReactNod
   const refresh = useCallback(() => setVersion((v) => v + 1), []);
 
   const signOut = useCallback(async () => {
-    await api.signOut().catch(() => undefined);
+    // Signed out on this phone whatever happens; a token the server could not revoke is logged.
+    await api.signOut().catch((error) => console.error("Technician sign-out: the server did not revoke the token", error));
     localStorage.removeItem(AUTH_KEY);
     forgetEverything(localStorage);
     router.replace("/tech/login");

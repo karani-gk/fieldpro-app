@@ -158,9 +158,16 @@ export const portal = {
     return portal.session();
   },
   logout: async () => {
-    csrfToken = null;
-    // GET: a POST with the session cookie would itself need the CSRF token.
-    await call("/api/method/logout", { auth: null }).catch(() => undefined);
+    // Frappe v16 accepts logout only as a POST, and a POST with the session cookie must carry
+    // the CSRF token ("session" adds it). A failure is logged, not hidden: the screen still goes
+    // to sign-in, but a session left open on the server should be visible to whoever debugs it.
+    try {
+      await call("/api/method/logout", { auth: "session", post: true });
+    } catch (error) {
+      console.error("Portal sign-out: the server did not end the session", error);
+    } finally {
+      csrfToken = null;
+    }
   },
   session: () => get<Session>("auth.session", "session"),
   myJobs: (cursor?: string | null) => page<JobSummary>("portal.my_jobs", "session", { cursor }),
