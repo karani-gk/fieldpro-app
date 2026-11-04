@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "The fieldpro technician app and customer portal, on the fieldpro Frappe backend.",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev -p 3030",
     "build": "next build",
