@@ -23,3 +23,9 @@ plain, commented where the why is not obvious, and consistent with `../fieldpro-
   access code (once per installation) they point to `/activate`. The backend enforces it anyway.
 - If the owner's dev server is running, do not `npm run build` here (it corrupts their `.next`):
   build a copy elsewhere with `node_modules` symlinked.
+- The technician app is phone-first with a desktop layout at `lg` (TechShell: sidebar, wide main).
+  Its content column has `mx-auto` for phones; inside the desktop grid that shrinks it to its
+  content, so it also needs `w-full`. A bar's percentage height needs a parent with a real height
+  (week page: columns are `h-full justify-end`, not shrunk by `items-end`).
+- Jobs tabs: Today, Open, Finished (`jobs.list_jobs` scope `finished`: Done and Cancelled, latest
+  change first). Offline, each tab filters the jobs cached at the last sync.
