@@ -44,6 +44,9 @@ you build in UPEO Academy's course
 
 ## Quick start
 
+**Everything in one download:** [fieldpro-course](https://github.com/karani-gk/fieldpro-course)
+holds this app, the backend and scripts that set up both. Clone it to start from nothing.
+
 **Requirements:** Node.js 22.6 or newer, and a running
 [fieldpro-frappe](https://github.com/karani-gk/fieldpro-frappe) backend with its demo data.
 
