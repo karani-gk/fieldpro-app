@@ -93,12 +93,15 @@ const page = <T>(method: string, auth: Auth, params?: Record<string, unknown>) =
 
 // ---------------------------------------------------------------- the technician app (token)
 
+/** The technician's lists (jobs.list_jobs): finished is Done and Cancelled, latest first. */
+export type JobScope = "today" | "open" | "all" | "finished";
+
 export function techApi(token: string) {
   const auth: Auth = { token };
   return {
     session: () => get<Session>("auth.session", auth),
     signOut: () => post<{ signed_out: boolean }>("auth.sign_out_device", auth),
-    listJobs: (scope: "today" | "open" | "all" = "today", cursor?: string | null) =>
+    listJobs: (scope: JobScope = "today", cursor?: string | null) =>
       page<JobSummary>("jobs.list_jobs", auth, { scope, cursor }),
     getJob: (job: string) => get<JobDetail>("jobs.get_job", auth, { job }),
     startVisit: (job: string, clientId: string, startedAt: string) =>

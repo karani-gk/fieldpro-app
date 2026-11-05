@@ -1,6 +1,7 @@
 "use client";
 
-// One job on the technician's phone.
+// One job on the technician's phone. On a desktop the work sits on the left and the visits on the
+// right; on a phone they stack.
 //
 // Work on site (start a visit, parts, end the visit) is tried online first; with no signal it
 // goes into the outbox with a client_id and syncs later. Workflow steps (Complete, Sign Off) need
@@ -9,6 +10,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import ErrorNote from "@/components/ErrorNote";
+import { Check, Clock, Phone, Pin } from "@/components/icons";
 import PrivateImage from "@/components/PrivateImage";
 import SignaturePad from "@/components/SignaturePad";
 import StatusBadge from "@/components/StatusBadge";
@@ -125,111 +127,155 @@ export default function TechJob({ params }: { params: { id: string } }) {
   const actions = job.actions.filter((a) => a.action !== "Start");
 
   return (
-    <div className="space-y-4">
-      <Link href="/tech" className="text-sm text-slate-500">
-        ← Today
+    <div className="space-y-4 lg:space-y-6">
+      <Link href="/tech" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800">
+        ← Jobs
       </Link>
       {fromCache && <p className="text-xs text-slate-500">No signal: this is the job as of the last sync.</p>}
 
-      <section className="card">
-        <div className="flex items-start justify-between gap-2">
-          <h1 className="text-lg font-bold">{job.issue}</h1>
-          <StatusBadge status={job.status} />
+      <div className="space-y-4 lg:grid lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-6 lg:space-y-0 xl:grid-cols-[minmax(0,1fr)_420px]">
+        <div className="space-y-4">
+          <section className="card lg:p-6">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-medium text-slate-400">{job.id}</p>
+                <h1 className="mt-0.5 text-lg font-bold leading-snug lg:text-2xl">{job.issue}</h1>
+              </div>
+              <StatusBadge status={job.status} />
+            </div>
+            <p className="mt-2 font-medium text-slate-800">{job.customer.name}</p>
+            <div className="mt-3 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
+              {job.site_address && (
+                <p className="flex items-start gap-2">
+                  <Pin className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+                  <span className="whitespace-pre-line">{job.site_address}</span>
+                </p>
+              )}
+              {job.contact_phone && (
+                <a className="flex items-center gap-2 text-brand hover:underline" href={`tel:${job.contact_phone}`}>
+                  <Phone className="h-4 w-4 shrink-0" />
+                  {job.contact_phone}
+                </a>
+              )}
+              <p className="flex items-center gap-2">
+                <Clock className="h-4 w-4 shrink-0 text-slate-400" />
+                {day(job.scheduled_date)} · {job.priority}
+              </p>
+            </div>
+            {job.description && <p className="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">{job.description}</p>}
+          </section>
+
+          {(job.status === "Done" || job.status === "Cancelled") && <Finished job={job} />}
+
+          <ErrorNote error={error} />
+          {pending.length > 0 && (
+            <section className="card border-amber-200 bg-amber-50" data-testid="pending">
+              <p className="text-sm font-semibold text-amber-900">Waiting to sync</p>
+              <ul className="mt-1 text-sm text-amber-900">
+                {pending.map((op) => (
+                  <li key={op.client_id}>
+                    {op.op === "start_visit" && "Visit started"}
+                    {op.op === "end_visit" && "Visit ended"}
+                    {op.op === "add_part" && `Part: ${op.item_name ?? op.item_code} × ${op.qty}`} · {dateTime(op.at)}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {canWork && !open && (
+            <button className="btn-primary w-full py-3" onClick={() => void startVisit()} disabled={!!busy}>
+              {busy === "start" ? "Starting…" : "Start visit"}
+            </button>
+          )}
+
+          {open && <OpenVisit busy={busy} onAddPart={addPart} onEnd={endVisit} />}
+
+          {open?.visit && online && <PhotoUpload visit={open.visit} />}
+
+          {actions.length > 0 && (
+            <section className="space-y-2">
+              {!online && <p className="text-xs text-slate-500">These steps need a connection: the server checks them.</p>}
+              {online && pending.length > 0 && <p className="text-xs text-slate-500">Sync your saved work first.</p>}
+              {actions.map((a) => (
+                <button
+                  key={a.action}
+                  className={a.action === SIGN_OFF ? "btn-primary w-full" : "btn-secondary w-full"}
+                  disabled={!online || pending.length > 0 || !!busy}
+                  onClick={() => (a.action === SIGN_OFF ? setSigning(true) : void apply(a.action))}
+                >
+                  {busy === a.action ? "Working…" : a.action}
+                </button>
+              ))}
+            </section>
+          )}
+
+          {signing && <SignOff busy={busy === SIGN_OFF} onCancel={() => setSigning(false)} onSign={(signature, name) => void apply(SIGN_OFF, { signature, signed_by: name })} />}
         </div>
-        <p className="mt-1 text-sm">{job.customer.name}</p>
-        <p className="text-sm text-slate-600">{job.site_address}</p>
-        {job.contact_phone && (
-          <a className="text-sm text-brand underline" href={`tel:${job.contact_phone}`}>
-            {job.contact_phone}
-          </a>
-        )}
-        {job.description && <p className="mt-2 text-sm text-slate-700">{job.description}</p>}
-        <p className="mt-2 text-xs text-slate-500">
-          {job.id} · {day(job.scheduled_date)} · {job.priority}
-        </p>
-      </section>
 
-      <ErrorNote error={error} />
-
-      {pending.length > 0 && (
-        <section className="card border-amber-200 bg-amber-50" data-testid="pending">
-          <p className="text-sm font-semibold text-amber-900">Waiting to sync</p>
-          <ul className="mt-1 text-sm text-amber-900">
-            {pending.map((op) => (
-              <li key={op.client_id}>
-                {op.op === "start_visit" && "Visit started"}
-                {op.op === "end_visit" && "Visit ended"}
-                {op.op === "add_part" && `Part: ${op.item_name ?? op.item_code} × ${op.qty}`} · {dateTime(op.at)}
+        <section className="lg:sticky lg:top-10">
+          <h2 className="mb-2 flex items-baseline justify-between text-sm font-semibold text-slate-700">
+            Visits
+            <span className="text-xs font-normal text-slate-500">
+              {job.total_hours.toFixed(1)} h · parts {money(job.parts_total)}
+            </span>
+          </h2>
+          {job.visits.length === 0 && <p className="text-sm text-slate-500">No visits yet.</p>}
+          <ul className="space-y-2">
+            {job.visits.map((v) => (
+              <li key={v.id} className="card">
+                <div className="flex justify-between text-sm">
+                  <span>{dateTime(v.started_at)}</span>
+                  <span className="text-slate-500">{v.status === "Open" ? "Open" : `${v.hours.toFixed(2)} h`}</span>
+                </div>
+                {v.parts.length > 0 && (
+                  <ul className="mt-2 text-sm text-slate-700">
+                    {v.parts.map((p) => (
+                      <li key={p.id} className="flex justify-between">
+                        <span>
+                          {p.item.name} × {p.qty}
+                        </span>
+                        <span>{money(p.amount)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {v.notes && <p className="mt-2 text-sm text-slate-600">{v.notes}</p>}
+                {v.photos.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {v.photos.map((ph) => (
+                      <PrivateImage key={ph.id} url={ph.url} load={loadFile} alt={ph.name} />
+                    ))}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
         </section>
-      )}
-
-      {canWork && !open && (
-        <button className="btn-primary w-full py-3" onClick={() => void startVisit()} disabled={!!busy}>
-          {busy === "start" ? "Starting…" : "Start visit"}
-        </button>
-      )}
-
-      {open && <OpenVisit busy={busy} onAddPart={addPart} onEnd={endVisit} />}
-
-      {open?.visit && online && <PhotoUpload visit={open.visit} />}
-
-      {actions.length > 0 && (
-        <section className="space-y-2">
-          {!online && <p className="text-xs text-slate-500">These steps need a connection: the server checks them.</p>}
-          {online && pending.length > 0 && <p className="text-xs text-slate-500">Sync your saved work first.</p>}
-          {actions.map((a) => (
-            <button
-              key={a.action}
-              className={a.action === SIGN_OFF ? "btn-primary w-full" : "btn-secondary w-full"}
-              disabled={!online || pending.length > 0 || !!busy}
-              onClick={() => (a.action === SIGN_OFF ? setSigning(true) : void apply(a.action))}
-            >
-              {busy === a.action ? "Working…" : a.action}
-            </button>
-          ))}
-        </section>
-      )}
-
-      {signing && <SignOff busy={busy === SIGN_OFF} onCancel={() => setSigning(false)} onSign={(signature, name) => void apply(SIGN_OFF, { signature, signed_by: name })} />}
-
-      <section>
-        <h2 className="mb-2 text-sm font-semibold text-slate-700">Visits</h2>
-        {job.visits.length === 0 && <p className="text-sm text-slate-500">No visits yet.</p>}
-        <ul className="space-y-2">
-          {job.visits.map((v) => (
-            <li key={v.id} className="card">
-              <div className="flex justify-between text-sm">
-                <span>{dateTime(v.started_at)}</span>
-                <span className="text-slate-500">{v.status === "Open" ? "Open" : `${v.hours.toFixed(2)} h`}</span>
-              </div>
-              {v.parts.length > 0 && (
-                <ul className="mt-2 text-sm text-slate-700">
-                  {v.parts.map((p) => (
-                    <li key={p.id} className="flex justify-between">
-                      <span>
-                        {p.item.name} × {p.qty}
-                      </span>
-                      <span>{money(p.amount)}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {v.notes && <p className="mt-2 text-sm text-slate-600">{v.notes}</p>}
-              {v.photos.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {v.photos.map((ph) => (
-                    <PrivateImage key={ph.id} url={ph.url} load={loadFile} alt={ph.name} />
-                  ))}
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </section>
+      </div>
     </div>
+  );
+}
+
+/** What a closed job ended with: who signed it off, or that it was cancelled. */
+function Finished({ job }: { job: JobDetail }) {
+  if (job.status === "Cancelled") {
+    return <section className="card border-slate-200 bg-slate-50 text-sm text-slate-600">This job was cancelled. Nothing more to do here.</section>;
+  }
+  return (
+    <section className="card flex items-start gap-3 border-emerald-200 bg-emerald-50/60">
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-emerald-500 text-white">
+        <Check className="h-5 w-5" />
+      </span>
+      <div className="text-sm">
+        <p className="font-semibold text-emerald-900">Job done</p>
+        {job.signed_off && (
+          <p className="text-emerald-800">
+            Signed off by {job.signed_off.by} · {dateTime(job.signed_off.at)}
+          </p>
+        )}
+      </div>
+    </section>
   );
 }
 

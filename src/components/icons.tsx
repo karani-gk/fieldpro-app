@@ -87,3 +87,25 @@ export const Play = (p: IconProps) => (
     <path d="M7 4v16l13-8z" />
   </Icon>
 );
+export const Pin = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" />
+    <circle cx="12" cy="9.5" r="2.5" />
+  </Icon>
+);
+export const Phone = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M5 4h3.5l1.5 4.5-2 1.2a11 11 0 0 0 6.3 6.3l1.2-2L20 15.5V19a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z" />
+  </Icon>
+);
+export const Clock = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
+  </Icon>
+);
+export const SignOut = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 17l5-5-5-5M15 12H4" />
+  </Icon>
+);
